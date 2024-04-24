@@ -1,0 +1,70 @@
+https://docs.base.org/base-camp/docs/error-triage/error-triage-exercise/
+
+CODE:
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+contract ErrorTriageExercise {
+    /**
+     * Finds the difference between each uint with its neighbor (a to b, b to c, etc.)
+     * and returns a uint array with the absolute integer difference of each pairing.
+     */
+    function diffWithNeighbor(
+        uint _a,
+        uint _b,
+        uint _c,
+        uint _d
+    ) public pure returns (uint[] memory) {
+        uint[] memory results = new uint[](3);
+        results[0] = absDiff(_a, _b);
+        results[1] = absDiff(_b, _c);
+        results[2] = absDiff(_c, _d);
+        return results;
+    }
+
+    function absDiff(uint x, uint y) internal pure returns (uint) {
+        return (x > y) ? (x - y) : (y - x);
+    }
+
+    /**
+     * Modifies _base by the value of _modifier. Base is always >= 1000. Modifiers can be
+     * between positive and negative 100.
+     */
+    function applyModifier(uint _base, int _modifier) public pure returns (uint) {
+        require(_base >= 1000, "Base must be at least 1000");
+
+        if (_modifier >= 0) {
+            uint positiveModifier = uint(_modifier);
+            uint result = _base + positiveModifier;
+            require(result >= _base, "Overflow");
+            return result;
+        } else {
+            uint negativeModifier = uint(-_modifier);
+            require(_base > negativeModifier, "Underflow would occur");
+            return _base - negativeModifier;
+        }
+    }
+
+    uint[] arr;
+
+    function popWithReturn() public returns (uint) {
+        require(arr.length > 0, "Array is empty");
+        uint lastIndex = arr.length - 1;
+        uint lastElement = arr[lastIndex];
+        arr.pop();
+        return lastElement;
+    }
+
+    function addToArr(uint _num) public {
+        arr.push(_num);
+    }
+
+    function getArr() public view returns (uint[] memory) {
+        return arr;
+    }
+
+    function resetArr() public {
+        delete arr;
+    }
+}
